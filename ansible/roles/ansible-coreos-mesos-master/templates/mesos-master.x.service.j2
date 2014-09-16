@@ -7,4 +7,4 @@ ExecStart=/bin/bash -c "/usr/bin/docker run --rm --net=\"host\" -e ZOOKEEPER_END
 ExecStop=/usr/bin/docker rm -f mesos-master
 
 [X-Fleet]
-X-Conflicts=mesos-master.*.service
+Conflicts=mesos-master.*.service

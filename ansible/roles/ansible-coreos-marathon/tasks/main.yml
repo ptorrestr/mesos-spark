@@ -19,25 +19,25 @@
 
 # Create required fleet unit files
 - name: Create Units directory
-  file: path=units state=directory
+  file: path={{ playbook_dir }}/units state=directory
   tags:
     - configuration
 
 - name: Create marathon Units
-  template: src=marathon.x.service.j2 dest=/units/marathon.1.service
+  template: src=marathon.x.service.j2 dest={{ playbook_dir }}/units/marathon.1.service
   tags:
     - configuration
 
 # Submit units to fleet
 - name: Submit marathon units
-  shell: fleetctl --tunnel {{ fleet_endpoint }} submit /units/marathon.1.service
+  shell: fleetctl --tunnel {{ fleet_endpoint }} submit {{ playbook_dir }}/units/marathon.1.service
   tags:
     - fleet
     - fleet_submit
 
 # Start units via fleet
 - name: Start marathon units
-  shell: sleep 5 && fleetctl --tunnel {{ fleet_endpoint }} start /units/marathon.1.service
+  shell: sleep 5 && fleetctl --tunnel {{ fleet_endpoint }} start {{ playbook_dir }}/units/marathon.1.service
   tags:
     - fleet
     - fleet_start

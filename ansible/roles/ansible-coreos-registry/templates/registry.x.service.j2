@@ -9,4 +9,4 @@ ExecStart=/usr/bin/docker run --rm --name docker-registry -v /home/core/docker-r
 ExecStop=/usr/bin/docker rm -f docker-registry
 
 [X-Fleet]
-X-ConditionMachineOf=docker-registry-install.1.service
+MachineOf=docker-registry-install.1.service

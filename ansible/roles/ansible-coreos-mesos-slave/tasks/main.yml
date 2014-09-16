@@ -19,7 +19,7 @@
 
 # Create required fleet unit files
 - name: Create Units directory
-  file: path=units state=directory
+  file: path={{ playbook_dir }}/units state=directory
   tags:
     - configuration
 
@@ -31,14 +31,14 @@
     - configuration
 
 - name: Create mesos-slave Units
-  template: src=mesos-slave.x.service.j2 dest=/units/mesos-slave.{{ item }}.service
+  template: src=mesos-slave.x.service.j2 dest={{ playbook_dir }}/units/mesos-slave.{{ item }}.service
   with_sequence: count={{ fleetctl_hosts.count }}
   tags:
     - configuration
 
 # Submit units to fleet
 - name: Submit mesos-slave units
-  shell: fleetctl --tunnel {{ fleet_endpoint }} submit /units/mesos-slave.{{ item }}.service
+  shell: fleetctl --tunnel {{ fleet_endpoint }} submit {{ playbook_dir }}/units/mesos-slave.{{ item }}.service
   with_sequence: count={{ fleetctl_hosts.count }}
   tags:
     - fleet
@@ -46,7 +46,7 @@
 
 # Start units via fleet
 - name: Start mesos-slave units
-  shell: sleep 5 && fleetctl --tunnel {{ fleet_endpoint }} start /units/mesos-slave.{{ item }}.service
+  shell: sleep 5 && fleetctl --tunnel {{ fleet_endpoint }} start {{ playbook_dir }}/units/mesos-slave.{{ item }}.service
   with_sequence: count={{ fleetctl_hosts.count }}
   tags:
     - fleet

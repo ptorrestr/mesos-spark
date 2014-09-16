@@ -9,5 +9,5 @@ ExecStart=/bin/bash -c "/usr/bin/docker run --rm --net=\"host\" -v /usr/lib64/li
 ExecStop=/usr/bin/docker rm -f mesos-slave
 
 [X-Fleet]
-X-Conflicts=mesos-slave.*.service
-X-ConditionMachineID={{ HOST_INFO.IDS[i-1] }}
+#Conflicts=mesos-slave.*.service
+MachineID={{ HOST_INFO.IDS[i-1] }}

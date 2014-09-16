@@ -11,6 +11,6 @@ ExecStart=/usr/bin/docker run --rm --name zookeeper --net="host" -e ZOO_HOSTS_IN
 ExecStop=/usr/bin/docker rm -f zookeeper
 
 [X-Fleet]
-X-Conflicts=zookeeper.*.service
+#Conflicts=zookeeper.*.service
 {% set i = item|int %}
-X-ConditionMachineID={{ HOST_IDS[i-1] }}
+MachineID={{ HOST_IDS[i-1] }}

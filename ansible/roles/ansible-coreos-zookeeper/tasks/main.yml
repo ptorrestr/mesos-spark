@@ -12,7 +12,7 @@
     - docker_push
 
 - name: Create Units directory
-  file: path=units state=directory
+  file: path={{ playbook_dir }}/units state=directory
   tags:
     - configuration
 
@@ -29,13 +29,13 @@
     - configuration
 
 - name: Create Zookeeper Units
-  template: src=zookeeper.x.service.j2 dest=/units/zookeeper.{{ item }}.service
+  template: src=zookeeper.x.service.j2 dest={{ playbook_dir }}/units/zookeeper.{{ item }}.service
   with_sequence: count={{ zookeeper_instances_number }}
   tags:
     - configuration
 
 - name: Create Zookeeper Sidekick Units
-  template: src=zookeepersidekick.x.service.j2 dest=/units/zookeepersidekick.{{ item }}.service
+  template: src=zookeepersidekick.x.service.j2 dest={{ playbook_dir }}/units/zookeepersidekick.{{ item }}.service
   with_sequence: count={{ zookeeper_instances_number }}
   tags:
     - configuration
@@ -43,14 +43,14 @@
 # Submit Units
 
 - name: Submit Zookeeper units
-  shell: fleetctl --tunnel {{ fleet_endpoint }} submit /units/zookeeper.{{ item }}.service
+  shell: fleetctl --tunnel {{ fleet_endpoint }} submit {{ playbook_dir }}/units/zookeeper.{{ item }}.service
   with_sequence: count={{ zookeeper_instances_number }}
   tags:
     - fleet
     - fleet_submit
 
 - name: Submit Zookeeper Sidekick units
-  shell: fleetctl --tunnel {{ fleet_endpoint }} submit /units/zookeepersidekick.{{ item }}.service
+  shell: fleetctl --tunnel {{ fleet_endpoint }} submit {{ playbook_dir }}/units/zookeepersidekick.{{ item }}.service
   with_sequence: count={{ zookeeper_instances_number }}
   tags:
     - fleet
@@ -58,14 +58,14 @@
 
 # Start Units
 - name: Start Zookeeper units
-  shell: sleep 5 && fleetctl --tunnel {{ fleet_endpoint }} start units/zookeeper.{{ item }}.service
+  shell: sleep 5 && fleetctl --tunnel {{ fleet_endpoint }} start {{ playbook_dir }}units/zookeeper.{{ item }}.service
   with_sequence: count={{ zookeeper_instances_number }}
   tags:
     - fleet
     - fleet_start
 
 - name: Start Zookeeper Sidekick units
-  shell: sleep 5 && fleetctl --tunnel {{ fleet_endpoint }} start units/zookeepersidekick.{{ item }}.service
+  shell: sleep 5 && fleetctl --tunnel {{ fleet_endpoint }} start {{ playbook_dir }}units/zookeepersidekick.{{ item }}.service
   with_sequence: count={{ zookeeper_instances_number }}
   tags:
     - fleet

@@ -1,6 +1,6 @@
 ---
 - name: Create Units directory
-  file: path=units state=directory
+  file: path={{ playbook_dir }}/units state=directory
   tags:
     - configuration
 
@@ -28,7 +28,7 @@
     - Write registry IP locally
 
 - name: Create Registry Units
-  template: src={{ item.template }} dest=/units/{{ item.file }}
+  template: src={{ item.template }} dest={{ playbook_dir }}/units/{{ item.file }}
   with_items:
     - template: "docker-registry-install.x.service.j2"
       file: "docker-registry-install.1.service"
@@ -39,13 +39,13 @@
 
 # Submit Units
 - name: Submit Install Registry units
-  shell: fleetctl --tunnel {{ fleet_endpoint }} submit /units/docker-registry-install.1.service
+  shell: fleetctl --tunnel {{ fleet_endpoint }} submit {{ playbook_dir }}/units/docker-registry-install.1.service
   tags:
     - fleet_submit
     - fleet_submit_registry
 
 - name: Submit Registry units
-  shell: fleetctl --tunnel {{ fleet_endpoint }} submit /units/{{ item }}
+  shell: fleetctl --tunnel {{ fleet_endpoint }} submit {{ playbook_dir }}/units/{{ item }}
   with_items:
     - "docker-registry-install.1.service"
     - "registry.1.service"

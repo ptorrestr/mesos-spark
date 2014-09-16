@@ -1,5 +1,5 @@
 [local]
-localhost ansible_connection=local ansible_python_interpreter="/opt/env/python/ansible/bin/python" fleet_endpoint="127.0.0.1:2222" 
+localhost ansible_connection=local ansible_python_interpreter="/home/pablo/env/ansible/bin/python" fleet_endpoint="127.0.0.1:2222" 
 
 [coreos]
 coreos-01 ansible_ssh_host=127.0.0.1 ansible_ssh_port=2222 ansible_ssh_user=core

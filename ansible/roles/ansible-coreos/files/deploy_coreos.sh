@@ -32,5 +32,6 @@ sysctl -w net.ipv6.conf.all.disable_ipv6=1
 
 # Create /etc/hosts file
 touch /etc/hosts
+echo 127.0.0.1 `hostname` >> /etc/hosts
 chmod 644 /etc/hosts
 chown root:root /etc/hosts
