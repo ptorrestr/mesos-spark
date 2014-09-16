@@ -1,0 +1,13 @@
+---
+# Build and prepare mesos image
+- name: Build mesos image
+  docker_image: docker_url=tcp://127.0.0.1:2375 path="roles/ansible-coreos-mesos/docker/docker-mesos" name="{{ mesos_image_name }}" state="build"
+  tags:
+    - docker
+    - docker_build
+
+- name: Push mesos image to repo
+  shell: "docker push {{ mesos_image_name }}"
+  tags:
+    - docker
+    - docker_push
