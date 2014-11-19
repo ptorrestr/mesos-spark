@@ -1,0 +1,43 @@
+---
+# Build and push image
+- name: Create neo4j-master Dockerfile
+  template: src=neo4j-master-dockerfile.j2 dest=roles/ansible-coreos-neo4j-master/docker/docker-neo4j-master/Dockerfile
+  tags:
+    - configuration
+
+- name: Build neo4j-master image
+  docker_image: docker_url=tcp://127.0.0.1:2375 path="roles/ansible-coreos-neo4j-master/docker/docker-neo4j-master" name="{{ neo4jmaster_image_name }}" state="build"
+  tags:
+    - docker
+    - docker_build
+
+- name: Push neo4j-master image to repo
+  shell: "docker push {{ neo4jmaster_image_name }}"
+  tags:
+    - docker
+    - docker_push
+
+# Create required fleet unit files
+- name: Create Units directory
+  file: path={{ playbook_dir }}/units state=directory
+  tags:
+    - configuration
+
+- name: Create neo4j-master Units
+  template: src=neo4j-master.x.service.j2 dest={{ playbook_dir }}/units/neo4j-master.1.service
+  tags:
+    - configuration
+
+# Submit units to fleet
+- name: Submit neo4j-master units
+  shell: fleetctl --tunnel {{ fleet_endpoint }} submit {{ playbook_dir }}/units/neo4j-master.1.service
+  tags:
+    - fleet
+    - fleet_submit
+
+# Start units via fleet
+- name: Start neo4j-master units
+  shell: sleep 5 && fleetctl --tunnel {{ fleet_endpoint }} start {{ playbook_dir }}/units/neo4j-master.1.service
+  tags:
+    - fleet
+    - fleet_start

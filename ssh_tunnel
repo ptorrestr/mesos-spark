@@ -1,0 +1,10 @@
+#NEO4J
+
+#Tunnel for Neo4j. We use localhost because is the interface used by the service.
+#However, other services may use different interfaces.
+
+#core-machine->srvgal
+vagrant ssh core-02 -- -L 7666:localhost:7474 -N
+
+#srvgal->localmachine
+ssh srvgal102 -L 7474:localhost:7666 -N
